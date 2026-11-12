@@ -1,0 +1,43 @@
+# Example deployment. There are intentionally no published ports: seedpath
+# holds API keys and download-client credentials and belongs on the internal
+# *arr network only.
+services:
+  seedpath:
+    build: .
+    # image: ghcr.io/alexmi256/organizarrproxy:latest
+    container_name: seedpath
+    restart: unless-stopped
+    init: true
+    env_file: .env
+    volumes:
+      - ./config:/config
+    networks:
+      - arr_stack
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/livez', timeout=3)
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    stop_grace_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  # Join the network that already contains rTorrent and the *arr containers.
+  arr_stack:
+    external: true

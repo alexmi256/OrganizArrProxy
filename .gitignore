@@ -222,3 +222,8 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 .idea/
+
+# seedpath runtime state and local config
+/data/
+/config/
+coverage.xml

@@ -1,0 +1,66 @@
+name: Bug report
+description: Something failed, a torrent was misplaced, or a fault was mishandled.
+title: "[bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Redact API keys, passwords, public IPs and magnet links before posting.**
+        Never paste a `d.announce` passkey.
+  - type: input
+    id: version
+    attributes:
+      label: seedpath version
+      description: Output of `seedpath version` or the image tag.
+      placeholder: v0.1.0 / sha-abc1234
+    validations:
+      required: true
+  - type: input
+    id: apps
+    attributes:
+      label: "*arr apps and versions"
+      placeholder: Radarr 5.x, Sonarr 4.x
+    validations:
+      required: true
+  - type: input
+    id: rtorrent
+    attributes:
+      label: rTorrent version
+      description: Output of `system.client_version`, or the ruTorrent image tag.
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Include the infohash, the observed state, and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: JSON log lines for the infohash, plus `seedpath preflight --json`.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration
+      description: Redacted env vars and download-client settings (category, addStopped, directory).
+      render: shell
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I ran `seedpath preflight` and pasted the result above.
+          required: true
+        - label: I checked whether the torrent's data is the library file (never delete data).
+          required: true
+        - label: I removed secrets from everything above.
+          required: true

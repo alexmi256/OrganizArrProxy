@@ -1,0 +1,170 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "seedpath"
+version = "0.1.0"
+description = "Place *arr grabs directly in the media library and seed from there."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+authors = [{ name = "seedpath contributors" }]
+keywords = ["servarr", "radarr", "sonarr", "rtorrent", "torrent", "hardlinks", "seedbox"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: System Administrators",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Internet :: File Transfer Protocol (FTP)",
+  "Topic :: System :: Systems Administration",
+  "Typing :: Typed",
+]
+dependencies = [
+  "aiosqlite>=0.20,<1",
+  "httpx>=0.28,<1",
+  "prometheus-client>=0.21,<1",
+  "pydantic>=2.10,<3",
+  "pydantic-settings>=2.7,<3",
+  "rich>=13.9,<15",
+  "starlette>=0.41,<1",
+  "structlog>=24.4,<26",
+  "typer>=0.15,<1",
+  "uvicorn[standard]>=0.32,<1",
+]
+
+[project.urls]
+Homepage = "https://github.com/alexmi256/OrganizArrProxy"
+Documentation = "https://github.com/alexmi256/OrganizArrProxy/tree/main/docs"
+Issues = "https://github.com/alexmi256/OrganizArrProxy/issues"
+Changelog = "https://github.com/alexmi256/OrganizArrProxy/blob/main/CHANGELOG.md"
+
+[project.scripts]
+seedpath = "seedpath.cli:main"
+
+[dependency-groups]
+dev = [
+  "mypy>=1.14,<2",
+  "pip-audit>=2.7,<3",
+  "pre-commit>=4,<5",
+  "pytest>=8.3,<10",
+  "pytest-asyncio>=0.25,<2",
+  "pytest-cov>=6,<8",
+  "ruff>=0.9,<1",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src",
+  "/tests",
+  "/docs",
+  "/README.md",
+  "/LICENSE",
+  "/CHANGELOG.md",
+  "/pyproject.toml",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/seedpath"]
+
+[tool.hatch.version]
+path = "src/seedpath/__init__.py"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+extend-exclude = ["BRIEF.md", ".venv", "site"]
+
+[tool.ruff.lint]
+select = [
+  "A",      # builtins shadowing
+  "ANN",    # annotations
+  "ASYNC",  # async correctness
+  "B",      # bugbear
+  "E",      # pycodestyle errors
+  "F",      # pyflakes
+  "I",      # import sorting
+  "PT",     # pytest style
+  "RUF",    # ruff-specific
+  "S",      # bandit
+  "SIM",    # simplify
+  "T20",    # no print in library code
+  "UP",     # pyupgrade
+  "W",      # pycodestyle warnings
+]
+ignore = [
+  "ANN401", # Any is sometimes the honest type for XML-RPC values
+  "S104",   # binding 0.0.0.0 is intentional in a container
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["ANN", "S101", "S105", "S106", "S108", "T20"]
+"docs/**" = ["ANN", "S101", "T20"]
+"src/seedpath/cli.py" = ["T20"] # the CLI prints a table on purpose
+
+[tool.ruff.lint.isort]
+known-first-party = ["seedpath"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+warn_no_return = true
+show_error_codes = true
+plugins = ["pydantic.mypy"]
+files = ["src", "tests"]
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+warn_unused_ignores = false
+
+[tool.pytest.ini_options]
+minversion = "8.3"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-ra --strict-markers --strict-config"
+filterwarnings = [
+  "error",
+  "ignore::DeprecationWarning:uvicorn.*",
+  "ignore:The anyio.abc.BlockingPortal alias is deprecated:DeprecationWarning",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["seedpath"]
+omit = [
+  "src/seedpath/__main__.py",
+  "src/seedpath/clients/ports.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 80
+exclude_lines = [
+  "pragma: no cover",
+  "if TYPE_CHECKING:",
+  "if __name__ == .__main__.:",
+  "raise NotImplementedError",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.bandit]
+targets = ["src"]
+exclude_dirs = ["tests", ".venv"]

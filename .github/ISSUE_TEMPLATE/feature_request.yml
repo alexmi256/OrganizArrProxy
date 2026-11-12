@@ -1,0 +1,37 @@
+name: Feature request
+description: Propose support for an app, protocol path or operational feature.
+title: "[feature] "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please check `BRIEF.md` and `docs/roadmap.md` first — v1 deliberately
+        targets rTorrent single-instance placement only.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do that seedpath does not do today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+      description: Include the API calls or protocol details you know of.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: This is about an *arr app other than Radarr/Sonarr/Lidarr/Readarr/Whisparr.
+        - label: This needs filesystem access or moving existing files.
+        - label: This is about usenet rather than torrents.
+        - label: I can test this against a real stack.

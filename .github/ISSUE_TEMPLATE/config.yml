@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security issue
+    url: https://github.com/alexmi256/OrganizArrProxy/security/advisories/new
+    about: Report vulnerabilities privately, never in a public issue.
+  - name: Servarr setup help
+    url: https://github.com/alexmi256/OrganizArrProxy/tree/main/docs/servarr-setup.md
+    about: Check the required app settings and run preflight first.
