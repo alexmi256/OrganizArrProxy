@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- build wheels / virtualenv -------------------------------------------
-FROM python:3.12-alpine AS builder
+FROM python:3.14-alpine AS builder
 
 # Installed from PyPI rather than the uv image so the build does not depend on
 # ghcr.io (which some registries/CI mirrors block). Bump with the lockfile.
@@ -21,7 +21,7 @@ COPY src ./src
 RUN uv sync --frozen --no-dev --no-editable
 
 # ---- runtime --------------------------------------------------------------
-FROM python:3.12-alpine AS runtime
+FROM python:3.14-alpine AS runtime
 
 RUN apk add --no-cache ca-certificates \
     && addgroup -S -g 10001 seedpath \
