@@ -32,9 +32,9 @@ dependencies = [
   "prometheus-client>=0.21,<1",
   "pydantic>=2.10,<3",
   "pydantic-settings>=2.7,<3",
-  "rich>=13.9,<15",
-  "starlette>=0.41,<1",
-  "structlog>=24.4,<26",
+  "rich>=13.9,<16",
+  "starlette>=0.41,<2",
+  "structlog>=24.4,<27",
   "typer>=0.15,<1",
   "uvicorn[standard]>=0.32,<1",
 ]
@@ -50,7 +50,7 @@ seedpath = "seedpath.cli:main"
 
 [dependency-groups]
 dev = [
-  "mypy>=1.14,<2",
+  "mypy>=1.14,<3",
   "pip-audit>=2.7,<3",
   "pre-commit>=4,<5",
   "pytest>=8.3,<10",
